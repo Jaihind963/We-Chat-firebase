@@ -50,4 +50,11 @@ await  createUser().then((value) => getAllUsers());
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers(){
     return firestore.collection("users").where('id', isNotEqualTo: user.uid).snapshots();
   }
+    static Future<void> updateUserInfo() async {
+     await firestore
+            .collection("users")
+            .doc(user.uid)
+            .update({"name": me.name,
+            "about": me.about});
+  }
 }

@@ -30,7 +30,7 @@ class _UserCardState extends State<UserCard> {
         ),
         title: Text(widget.user.name),
         subtitle: Text(widget.user.about),
-        trailing:const Text(
+        trailing: Text(
           "12:00 pm",
           style: TextStyle(color: Colors.black54),
         ),
