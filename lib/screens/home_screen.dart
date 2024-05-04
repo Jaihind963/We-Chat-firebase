@@ -27,15 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: PopScope(
-        canPop: false,
-        onPopInvoked: (didPop) {
+        canPop: !isSearching,
+        onPopInvoked: (_)async {
           if(isSearching){
             setState(() {
               isSearching =!isSearching;
             });
            
           }else{
-            Future.value(true);
+           Navigator.of(context).pop();
           }
         },
         child: Scaffold(
@@ -52,18 +52,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       border: InputBorder.none,
                     ),
                     onChanged: (value) {
-                    searchList.clear();
+                    if (value.isEmpty){
+                      setState(() {
+                        searchList.clear();
+                      });
+                    }else{
+                      searchList.clear();
                       for (var i in list) {
         
                         if (i.name.toLowerCase().contains(value.toLowerCase()) ||
                             i.email.toLowerCase().contains(value.toLowerCase())) {
                               searchList.add(i);
-                          setState(() {
+                          
+                        }
+                      }
+                      setState(() {
                             searchList;
                             
                           });
-                        }
-                      }
+                    }
                     },
                   )
                 : const Text(
@@ -74,6 +81,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   setState(() {
                     isSearching = !isSearching;
+
+                    if(!isSearching){
+                      searchList.clear();
+                    }
                   });
                 },
                 icon: Icon(

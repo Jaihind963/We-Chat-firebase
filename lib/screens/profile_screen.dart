@@ -60,28 +60,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 10,
                 ),
                 SizedBox(height: 5),
-           _image != null?     ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: Image.file(
-                   
-                   File(_image!),
-                   width:100,
-                   height: 100,
-                   fit: BoxFit.cover,
-              
-                  ),
-                ):ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.fill,
-                    width: 100,
-                    height: 100,
-                    imageUrl: widget.user.image,
-                    errorWidget: (context, url, error) => CircleAvatar(
-                      child: Icon(Iconsax.user),
-                    ),
-                  ),
-                ),
+                _image != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image.file(
+                          File(_image!),
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          width: 100,
+                          height: 100,
+                          imageUrl: widget.user.image,
+                          errorWidget: (context, url, error) => CircleAvatar(
+                            child: Icon(Iconsax.user),
+                          ),
+                        ),
+                      ),
                 IconButton(
                   onPressed: () {
                     showBottomBar();
@@ -201,41 +201,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-               
                 ElevatedButton.icon(
-                    onPressed: () async {
-                      final ImagePicker picker = ImagePicker();
-                      // Pick an image.
-                      final XFile? image =
-                          await picker.pickImage(source: ImageSource.gallery);
+                  onPressed: () async {
+                    final ImagePicker picker = ImagePicker();
+                    // Pick an image.
+                    final XFile? image =
+                        await picker.pickImage(source: ImageSource.gallery,imageQuality: 80);
 
-                          if(image!= null){
-                            setState(() {
-                              _image = image.path;
-                            });
-                          }
-                          Navigator.pop(context);
-                    },
-                    icon: Image.asset(
-                      "assets/images/add_image.png",
-                      height: 50,
-                      width: 50,
-                      fit: BoxFit.fill,
-                    ),
-                    label: Text("Photo"),),
-                    ElevatedButton.icon(
+                    if (image != null) {
+                      setState(() {
+                        _image = image.path;
+                      });
+                      APIs.updateProfilePicture(File(_image!));
+                      Navigator.pop(context);
+                    }
+                    
+                    
+
+                  },
+                  icon: Image.asset(
+                    "assets/images/add_image.png",
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover
+                  ),
+                  label: Text("Photo"),
+                ),
+                ElevatedButton.icon(
                   onPressed: () async {
                     final ImagePicker picker = ImagePicker();
                     // Capture a photo.
                     final XFile? photo =
                         await picker.pickImage(source: ImageSource.camera);
 
-if (photo != null){
-  setState(() {
-    _image = photo.path;
-  });
-}
-Navigator.pop(context);
+                    if (photo != null) {
+                      setState(() {
+                        _image = photo.path;
+                      });
+                    }
+                    Navigator.pop(context);
                   },
                   icon: Image.asset(
                     "assets/images/camera.png",
